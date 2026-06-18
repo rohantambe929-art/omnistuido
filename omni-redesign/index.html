@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omni Studio - Landing Page Builder for Service Businesses</title>
+  <meta name="description" content="Build high-converting landing pages in minutes. Trusted by 500+ service businesses across the USA.">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+  <style>
+    /* Homepage Specific Styles */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--chalk-white) 0%, #f0ede6 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      opacity: 0.1;
+    }
+
+    .hero-canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    .feature-showcase {
+      position: relative;
+      padding: var(--space-4xl) 0;
+    }
+
+    .showcase-visual {
+      background: var(--obsidian-black);
+      border-radius: var(--radius-xl);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-xl);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .showcase-screen {
+      background: var(--chalk-white);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      aspect-ratio: 16/10;
+      position: relative;
+    }
+
+    .showcase-ui {
+      padding: var(--space-md);
+    }
+
+    .ui-header {
+      display: flex;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+
+    .ui-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--overcast-blue);
+    }
+
+    .ui-block {
+      background: var(--chalk-white);
+      border: 1px solid var(--overcast-blue);
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+      margin-bottom: var(--space-sm);
+      transition: all var(--transition-base);
+    }
+
+    .ui-block:hover {
+      border-color: var(--toffee-brown);
+      box-shadow: var(--shadow-md);
+    }
+
+    .testimonial-slider {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .testimonial-track {
+      display: flex;
+      transition: transform 0.6s ease;
+    }
+
+    .testimonial-card {
+      min-width: 100%;
+      padding: var(--space-2xl);
+    }
+
+    .stat-number {
+      font-size: clamp(3rem, 6vw, 5rem);
+      font-weight: 800;
+      color: var(--toffee-brown);
+      line-height: 1;
+    }
+
+    .cta-section {
+      background: var(--obsidian-black);
+      color: var(--chalk-white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.05;
+      background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 35px,
+        var(--chalk-white) 35px,
+        var(--chalk-white) 70px
+      );
+    }
+
+    .nav-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      background: var(--chalk-white);
+      z-index: 1000;
+      padding: var(--space-2xl);
+      transform: translateX(100%);
+      transition: transform var(--transition-slow);
+    }
+
+    .nav-menu.active {
+      transform: translateX(0);
+    }
+
+    @media (min-width: 768px) {
+      .nav-menu {
+        display: block;
+        position: static;
+        width: auto;
+        height: auto;
+        transform: none;
+        background: transparent;
+        padding: 0;
+      }
+    }
+
+    .mobile-menu-btn {
+      display: block;
+      z-index: 1001;
+    }
+
+    @media (min-width: 768px) {
+      .mobile-menu-btn {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="bg-chalk" style="position: sticky; top: 0; z-index: 999; box-shadow: var(--shadow-sm);">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--space-md) 0;">
+        <a href="/" style="font-size: 1.5rem; font-weight: 800; color: var(--obsidian-black);">
+          omni<span class="text-toffee">.studio</span>
+        </a>
+        
+        <div class="nav-menu" id="navMenu">
+          <ul style="display: flex; flex-direction: column; gap: var(--space-lg);">
+            <li><a href="#features" style="font-weight: 500;">Features</a></li>
+            <li><a href="#how-it-works" style="font-weight: 500;">How It Works</a></li>
+            <li><a href="#testimonials" style="font-weight: 500;">Testimonials</a></li>
+            <li><a href="pages/pricing.html" style="font-weight: 500;">Pricing</a></li>
+            <li><a href="pages/contact.html" style="font-weight: 500;">Contact</a></li>
+            <li><a href="#" class="btn btn-primary btn-sm">Get Started Free</a></li>
+          </ul>
+        </div>
+
+        <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Toggle menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h18M3 6h18M3 18h18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-bg">
+      <canvas id="heroCanvas" class="hero-canvas"></canvas>
+    </div>
+    
+    <div class="container hero-content">
+      <div class="grid grid-2" style="align-items: center;">
+        <div class="fade-in">
+          <p class="text-label text-toffee mb-md">TRUSTED BY 500+ SERVICE BUSINESSES</p>
+          <h1 class="text-display mb-xl">
+            Build Landing Pages That 
+            <span class="text-toffee">Convert Visitors</span> Into Customers
+          </h1>
+          <p class="text-body-lg mb-xl" style="color: var(--overcast-blue-dark);">
+            No coding required. Create professional, mobile-responsive landing pages in minutes. 
+            Perfect for contractors, consultants, and service providers who need results fast.
+          </p>
+          <div style="display: flex; gap: var(--space-md); flex-wrap: wrap;">
+            <a href="#" class="btn btn-primary btn-lg">Start Building Free</a>
+            <a href="#how-it-works" class="btn btn-secondary btn-lg">See How It Works</a>
+          </div>
+          <p class="text-body-sm mt-lg" style="color: var(--overcast-blue);">
+            ✓ No credit card required &nbsp; ✓ 14-day free trial &nbsp; ✓ Cancel anytime
+          </p>
+        </div>
+        
+        <div class="fade-in hide-mobile">
+          <div class="showcase-visual">
+            <div class="showcase-screen">
+              <div class="showcase-ui">
+                <div class="ui-header">
+                  <div class="ui-dot" style="background: #EF4444;"></div>
+                  <div class="ui-dot" style="background: #F59E0B;"></div>
+                  <div class="ui-dot" style="background: #10B981;"></div>
+                </div>
+                <div class="ui-block" id="uiblock1">
+                  <div style="height: 12px; width: 60%; background: var(--overcast-blue); border-radius: 6px; margin-bottom: 8px;"></div>
+                  <div style="height: 8px; width: 40%; background: var(--overcast-blue-light); border-radius: 4px;"></div>
+                </div>
+                <div class="ui-block" id="uiblock2">
+                  <div style="height: 12px; width: 80%; background: var(--overcast-blue); border-radius: 6px; margin-bottom: 8px;"></div>
+                  <div style="height: 8px; width: 50%; background: var(--overcast-blue-light); border-radius: 4px;"></div>
+                </div>
+                <div class="ui-block" id="uiblock3">
+                  <div style="height: 12px; width: 70%; background: var(--overcast-blue); border-radius: 6px; margin-bottom: 8px;"></div>
+                  <div style="height: 8px; width: 45%; background: var(--overcast-blue-light); border-radius: 4px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <section class="section-sm bg-chalk">
+    <div class="container">
+      <p class="text-center text-body-sm text-overcast mb-xl">TRUSTED BY SERVICE BUSINESSES ACROSS THE USA</p>
+      <div class="grid grid-4" style="align-items: center; opacity: 0.6;">
+        <div class="text-center">
+          <div style="font-size: 1.5rem; font-weight: 700; color: var(--obsidian-black);">ABC Plumbing</div>
+          <div class="text-body-sm">Dallas, TX</div>
+        </div>
+        <div class="text-center">
+          <div style="font-size: 1.5rem; font-weight: 700; color: var(--obsidian-black);">Elite HVAC</div>
+          <div class="text-body-sm">Phoenix, AZ</div>
+        </div>
+        <div class="text-center">
+          <div style="font-size: 1.5rem; font-weight: 700; color: var(--obsidian-black);">ProClean Services</div>
+          <div class="text-body-sm">Miami, FL</div>
+        </div>
+        <div class="text-center">
+          <div style="font-size: 1.5rem; font-weight: 700; color: var(--obsidian-black);">Smith Consulting</div>
+          <div class="text-body-sm">Denver, CO</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="section">
+    <div class="container">
+      <div class="section-header">
+        <p class="text-label text-toffee mb-md">WHY CHOOSE OMNI STUDIO</p>
+        <h2 class="text-h2 mb-lg">Everything You Need to Grow Your Service Business Online</h2>
+        <p class="text-body-lg" style="color: var(--overcast-blue-dark);">
+          Built specifically for service businesses. No fluff, just the tools you need to get more customers.
+        </p>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="card fade-in">
+          <div style="width: 48px; height: 48px; background: var(--toffee-brown); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-lg);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h3 class="text-h4 mb-md">Drag & Drop Builder</h3>
+          <p class="text-body" style="color: var(--overcast-blue-dark);">
+            Build beautiful pages without touching a single line of code. Just drag, drop, and done.
+          </p>
+        </div>
+
+        <div class="card fade-in">
+          <div style="width: 48px; height: 48px; background: var(--toffee-brown); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-lg);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+              <path d="M12 18h.01"/>
+            </svg>
+          </div>
+          <h3 class="text-h4 mb-md">Mobile Responsive</h3>
+          <p class="text-body" style="color: var(--overcast-blue-dark);">
+            Every page looks perfect on any device. Your customers can reach you from anywhere.
+          </p>
+        </div>
+
+        <div class="card fade-in">
+          <div style="width: 48px; height: 48px; background: var(--toffee-brown); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-lg);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          </div>
+          <h3 class="text-h4 mb-md">Fast Loading</h3>
+          <p class="text-body" style="color: var(--overcast-blue-dark);">
+            Pages that load in under 2 seconds. Keep visitors engaged and improve your search rankings.
+          </p>
+        </div>
+
+        <div class="card fade-in">
+          <div style="width: 48px; height: 48px; background: var(--toffee-brown); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-lg);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <h3 class="text-h4 mb-md">Lead Capture Forms</h3>
+          <p class="text-body" style="color: var(--overcast-blue-dark);">
+            Built-in forms that convert visitors into leads. Get notified instantly when someone contacts you.
+          </p>
+        </div>
+
+        <div class="card fade-in">
+          <div style="width: 48px; height: 48px; background: var(--toffee-brown); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-lg);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <h3 class="text-h4 mb-md">Quick Setup</h3>
+          <p class="text-body" style="color: var(--overcast-blue-dark);">
+            Launch your first page in under 30 minutes. Pre-built templates designed for service businesses.
+          </p>
+        </div>
+
+        <div class="card fade-in">
+          <div style="width: 48px; height: 48px; background: var(--toffee-brown); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-lg);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3 class="text-h4 mb-md">Secure & Reliable</h3>
+          <p class="text-body" style="color: var(--overcast-blue-dark);">
+            SSL included, daily backups, and 99.9% uptime. Your business data is always safe.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section id="how-it-works" class="section bg-chalk">
+    <div class="container">
+      <div class="section-header">
+        <p class="text-label text-toffee mb-md">SIMPLE PROCESS</p>
+        <h2 class="text-h2 mb-lg">From Idea to Live Page in Three Steps</h2>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="text-center fade-in">
+          <div style="width: 80px; height: 80px; background: var(--toffee-brown); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-lg); font-size: 2rem; font-weight: 800; color: var(--chalk-white);">1</div>
+          <h3 class="text-h3 mb-md">Choose a Template</h3>
+          <p class="text-body" style="color: var(--overcast-blue-dark);">
+            Select from dozens of professionally designed templates built for service businesses like yours.
+          </p>
+        </div>
+
+        <div class="text-center fade-in">
+          <div style="width: 80px; height: 80px; background: var(--toffee-brown); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-lg); font-size: 2rem; font-weight: 800; color: var(--chalk-white);">2</div>
+          <h3 class="text-h3 mb-md">Customize Everything</h3>
+          <p class="text-body" style="color: var(--overcast-blue-dark);">
+            Add your branding, photos, and message. Our intuitive editor makes it easy to make it yours.
+          </p>
+        </div>
+
+        <div class="text-center fade-in">
+          <div style="width: 80px; height: 80px; background: var(--toffee-brown); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-lg); font-size: 2rem; font-weight: 800; color: var(--chalk-white);">3</div>
+          <h3 class="text-h3 mb-md">Publish & Grow</h3>
+          <p class="text-body" style="color: var(--overcast-blue-dark);">
+            Go live with one click. Share your page and start converting visitors into paying customers.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="section bg-obsidian">
+    <div class="container">
+      <div class="grid grid-4">
+        <div class="text-center fade-in">
+          <div class="stat-number mb-md">500+</div>
+          <p class="text-body" style="color: var(--overcast-blue);">Active Businesses</p>
+        </div>
+        <div class="text-center fade-in">
+          <div class="stat-number mb-md">10K+</div>
+          <p class="text-body" style="color: var(--overcast-blue);">Pages Created</p>
+        </div>
+        <div class="text-center fade-in">
+          <div class="stat-number mb-md">2M+</div>
+          <p class="text-body" style="color: var(--overcast-blue);">Leads Generated</p>
+        </div>
+        <div class="text-center fade-in">
+          <div class="stat-number mb-md">99%</div>
+          <p class="text-body" style="color: var(--overcast-blue);">Customer Satisfaction</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimonials" class="section">
+    <div class="container">
+      <div class="section-header">
+        <p class="text-label text-toffee mb-md">REAL RESULTS</p>
+        <h2 class="text-h2 mb-lg">What Business Owners Like You Are Saying</h2>
+      </div>
+
+      <div class="testimonial-slider">
+        <div class="testimonial-track" id="testimonialTrack">
+          <div class="testimonial-card">
+            <div class="card">
+              <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-lg);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--toffee-brown)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--toffee-brown)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--toffee-brown)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--toffee-brown)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--toffee-brown)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <p class="text-body-lg mb-xl" style="font-style: italic;">
+                "I had my landing page up and running in less than an hour. Since then, I've seen a 40% increase in qualified leads. This tool is a game-changer for my plumbing business."
+              </p>
+              <div style="display: flex; align-items: center; gap: var(--space-md);">
+                <div style="width: 60px; height: 60px; background: var(--overcast-blue); border-radius: 50%;"></div>
+                <div>
+                  <div style="font-weight: 700;">Mike Rodriguez</div>
+                  <div class="text-body-sm" style="color: var(--overcast-blue);">Owner, ABC Plumbing - Dallas, TX</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="card">
+              <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-lg);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--toffee-brown)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--toffee-brown)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--toffee-brown)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--toffee-brown)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--toffee-brown)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <p class="text-body-lg mb-xl" style="font-style: italic;">
+                "As a 55-year-old who's not tech-savvy, I was worried this would be too complicated. But it's so intuitive! My conversion rate doubled in the first month."
+              </p>
+              <div style="display: flex; align-items: center; gap: var(--space-md);">
+                <div style="width: 60px; height: 60px; background: var(--overcast-blue); border-radius: 50%;"></div>
+                <div>
+                  <div style="font-weight: 700;">Sarah Thompson</div>
+                  <div class="text-body-sm" style="color: var(--overcast-blue);">Founder, Elite HVAC - Phoenix, AZ</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="card">
+              <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-lg);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--toffee-brown)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--toffee-brown)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--toffee-brown)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--toffee-brown)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--toffee-brown)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <p class="text-body-lg mb-xl" style="font-style: italic;">
+                "The ROI has been incredible. We're getting 3-5 qualified leads per day now. The best part? I can update the page myself whenever I need to."
+              </p>
+              <div style="display: flex; align-items: center; gap: var(--space-md);">
+                <div style="width: 60px; height: 60px; background: var(--overcast-blue); border-radius: 50%;"></div>
+                <div>
+                  <div style="font-weight: 700;">James Chen</div>
+                  <div class="text-body-sm" style="color: var(--overcast-blue);">CEO, ProClean Services - Miami, FL</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: var(--space-md); margin-top: var(--space-xl);">
+        <button onclick="prevTestimonial()" class="btn btn-outline" aria-label="Previous testimonial">←</button>
+        <button onclick="nextTestimonial()" class="btn btn-outline" aria-label="Next testimonial">→</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section cta-section">
+    <div class="cta-pattern"></div>
+    <div class="container" style="position: relative; z-index: 2;">
+      <div class="text-center">
+        <h2 class="text-h2 mb-lg">Ready to Grow Your Business?</h2>
+        <p class="text-body-lg mb-xl" style="color: var(--overcast-blue); max-width: 600px; margin-left: auto; margin-right: auto;">
+          Join 500+ service businesses already using Omni Studio to build their online presence and convert more visitors into customers.
+        </p>
+        <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+          <a href="#" class="btn btn-primary btn-lg">Start Your Free Trial</a>
+          <a href="pages/contact.html" class="btn btn-secondary btn-lg" style="border-color: var(--chalk-white); color: var(--chalk-white);">Talk to Sales</a>
+        </div>
+        <p class="text-body-sm mt-lg" style="color: var(--overcast-blue);">
+          14-day free trial • No credit card required • Cancel anytime
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="section-sm bg-chalk" style="border-top: 1px solid rgba(139, 160, 178, 0.2);">
+    <div class="container">
+      <div class="grid grid-4">
+        <div>
+          <a href="/" style="font-size: 1.5rem; font-weight: 800; color: var(--obsidian-black);">
+            omni<span class="text-toffee">.studio</span>
+          </a>
+          <p class="text-body-sm mt-md" style="color: var(--overcast-blue);">
+            Build high-converting landing pages for your service business in minutes.
+          </p>
+        </div>
+        
+        <div>
+          <h4 class="text-h4 mb-md">Product</h4>
+          <ul style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <li><a href="#features" class="text-body-sm" style="color: var(--overcast-blue-dark);">Features</a></li>
+            <li><a href="pages/pricing.html" class="text-body-sm" style="color: var(--overcast-blue-dark);">Pricing</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Templates</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Integrations</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-h4 mb-md">Company</h4>
+          <ul style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">About Us</a></li>
+            <li><a href="pages/contact.html" class="text-body-sm" style="color: var(--overcast-blue-dark);">Contact</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Careers</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Blog</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-h4 mb-md">Support</h4>
+          <ul style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Help Center</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Documentation</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Status</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top: var(--space-2xl); padding-top: var(--space-xl); border-top: 1px solid rgba(139, 160, 178, 0.2);">
+        <p class="text-body-sm text-center" style="color: var(--overcast-blue);">
+          © 2024 Omni Studio. All rights reserved. Made with ❤️ for service businesses.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/animations.js"></script>
+  <script>
+    // Mobile menu toggle
+    function toggleMenu() {
+      const menu = document.getElementById('navMenu');
+      menu.classList.toggle('active');
+    }
+
+    // Testimonial slider
+    let currentTestimonial = 0;
+    const testimonials = document.querySelectorAll('.testimonial-card');
+    const track = document.getElementById('testimonialTrack');
+
+    function showTestimonial(index) {
+      track.style.transform = `translateX(-${index * 100}%)`;
+      currentTestimonial = index;
+    }
+
+    function nextTestimonial() {
+      currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+      showTestimonial(currentTestimonial);
+    }
+
+    function prevTestimonial() {
+      currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+      showTestimonial(currentTestimonial);
+    }
+
+    // Auto-rotate testimonials every 5 seconds
+    setInterval(nextTestimonial, 5000);
+
+    // GSAP Animations
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Fade in elements on scroll
+    gsap.utils.toArray('.fade-in').forEach(element => {
+      gsap.fromTo(element, 
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          scrollTrigger: {
+            trigger: element,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    });
+
+    // UI Block animations
+    gsap.to('#uiblock1', {
+      x: 10,
+      duration: 2,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut'
+    });
+
+    gsap.to('#uiblock2', {
+      x: -10,
+      duration: 2.5,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut',
+      delay: 0.5
+    });
+
+    gsap.to('#uiblock3', {
+      x: 10,
+      duration: 3,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut',
+      delay: 1
+    });
+  </script>
+</body>
+</html>
