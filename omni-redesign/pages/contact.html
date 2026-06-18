@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - Omni Studio</title>
+  <meta name="description" content="Get in touch with our team. We're here to help you succeed with your landing page needs.">
+  <link rel="stylesheet" href="../css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <style>
+    .contact-hero {
+      background: linear-gradient(135deg, var(--obsidian-black) 0%, #1a2026 100%);
+      color: var(--chalk-white);
+      padding: var(--space-4xl) 0;
+      text-align: center;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-3xl);
+    }
+
+    @media (min-width: 1024px) {
+      .contact-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .contact-info-section {
+      padding: var(--space-2xl);
+    }
+
+    .contact-card {
+      background: var(--chalk-white);
+      border-radius: var(--radius-xl);
+      padding: var(--space-2xl);
+      box-shadow: var(--shadow-lg);
+      margin-bottom: var(--space-xl);
+    }
+
+    .contact-method {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-lg);
+      margin-bottom: var(--space-xl);
+    }
+
+    .contact-icon {
+      width: 56px;
+      height: 56px;
+      min-width: 56px;
+      background: rgba(217, 119, 6, 0.1);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--toffee-brown);
+    }
+
+    .contact-form-container {
+      background: var(--chalk-white);
+      border-radius: var(--radius-xl);
+      padding: var(--space-2xl);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+
+    @media (min-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .success-message {
+      display: none;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid var(--success);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      color: var(--success);
+      font-weight: 600;
+      text-align: center;
+      margin-top: var(--space-lg);
+    }
+
+    .team-member {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-lg);
+      background: rgba(217, 119, 6, 0.05);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-md);
+      transition: all var(--transition-base);
+    }
+
+    .team-member:hover {
+      background: rgba(217, 119, 6, 0.1);
+      transform: translateX(8px);
+    }
+
+    .team-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--overcast-blue);
+    }
+
+    .office-location {
+      background: var(--chalk-white);
+      border-radius: var(--radius-xl);
+      padding: var(--space-2xl);
+      box-shadow: var(--shadow-lg);
+      margin-top: var(--space-2xl);
+    }
+
+    .location-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
+    }
+
+    @media (min-width: 768px) {
+      .location-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .response-time-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-full);
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-top: var(--space-md);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="bg-chalk" style="position: sticky; top: 0; z-index: 999; box-shadow: var(--shadow-sm);">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--space-md) 0;">
+        <a href="../index.html" style="font-size: 1.5rem; font-weight: 800; color: var(--obsidian-black);">
+          omni<span class="text-toffee">.studio</span>
+        </a>
+        
+        <div class="nav-menu" id="navMenu">
+          <ul style="display: flex; flex-direction: column; gap: var(--space-lg);">
+            <li><a href="../index.html#features" style="font-weight: 500;">Features</a></li>
+            <li><a href="../index.html#how-it-works" style="font-weight: 500;">How It Works</a></li>
+            <li><a href="../index.html#testimonials" style="font-weight: 500;">Testimonials</a></li>
+            <li><a href="pricing.html" style="font-weight: 500;">Pricing</a></li>
+            <li><a href="contact.html" style="font-weight: 500; color: var(--toffee-brown);">Contact</a></li>
+            <li><a href="#" class="btn btn-primary btn-sm">Get Started Free</a></li>
+          </ul>
+        </div>
+
+        <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Toggle menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h18M3 6h18M3 18h18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contact Hero -->
+  <section class="contact-hero">
+    <div class="container">
+      <p class="text-label" style="color: var(--toffee-brown); margin-bottom: var(--space-md);">GET IN TOUCH</p>
+      <h1 class="text-display mb-lg">We're Here to Help You Succeed</h1>
+      <p class="text-body-lg" style="color: var(--overcast-blue); max-width: 700px; margin: 0 auto;">
+        Have questions about Omni Studio? Need help choosing the right plan? Our team is ready to assist you every step of the way.
+      </p>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="section">
+    <div class="container">
+      <div class="contact-grid">
+        <!-- Left Column: Contact Information -->
+        <div class="contact-info-section">
+          <div class="fade-in">
+            <h2 class="text-h2 mb-xl">Let's Start a Conversation</h2>
+            <p class="text-body-lg mb-xl" style="color: var(--overcast-blue-dark);">
+              Whether you're exploring options for your business or need technical support, we're just a message away. Our team typically responds within 2 hours during business hours.
+            </p>
+
+            <div class="contact-card">
+              <div class="contact-method">
+                <div class="contact-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-h4 mb-sm">Email Us</h3>
+                  <p class="text-body mb-sm" style="color: var(--overcast-blue-dark);">For general inquiries and support</p>
+                  <a href="mailto:hello@omni.studio" class="text-toffee" style="font-weight: 600;">hello@omni.studio</a>
+                  <div class="response-time-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    Avg. response time: 2 hours
+                  </div>
+                </div>
+              </div>
+
+              <div class="contact-method">
+                <div class="contact-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-h4 mb-sm">Call Us</h3>
+                  <p class="text-body mb-sm" style="color: var(--overcast-blue-dark);">Mon-Fri from 8am to 6pm EST</p>
+                  <a href="tel:+18001234567" class="text-toffee" style="font-weight: 600;">+1 (800) 123-4567</a>
+                  <p class="text-body-sm mt-sm" style="color: var(--overcast-blue);">Business & Enterprise plans get priority phone support</p>
+                </div>
+              </div>
+
+              <div class="contact-method">
+                <div class="contact-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-h4 mb-sm">Visit Us</h3>
+                  <p class="text-body" style="color: var(--overcast-blue-dark);">
+                    123 Innovation Drive<br>
+                    San Francisco, CA 94105<br>
+                    United States
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="contact-card">
+              <h3 class="text-h3 mb-lg">Meet Your Support Team</h3>
+              <div class="team-member">
+                <div class="team-avatar"></div>
+                <div>
+                  <div style="font-weight: 700;">Sarah Mitchell</div>
+                  <div class="text-body-sm" style="color: var(--overcast-blue);">Head of Customer Success</div>
+                </div>
+              </div>
+              <div class="team-member">
+                <div class="team-avatar"></div>
+                <div>
+                  <div style="font-weight: 700;">David Chen</div>
+                  <div class="text-body-sm" style="color: var(--overcast-blue);">Technical Support Lead</div>
+                </div>
+              </div>
+              <div class="team-member">
+                <div class="team-avatar"></div>
+                <div>
+                  <div style="font-weight: 700;">Emily Rodriguez</div>
+                  <div class="text-body-sm" style="color: var(--overcast-blue);">Sales Consultant</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Contact Form (EXISTING FORM - PRESERVED) -->
+        <div class="fade-in">
+          <div class="contact-form-container">
+            <h3 class="text-h3 mb-lg">Send Us a Message</h3>
+            <p class="text-body mb-xl" style="color: var(--overcast-blue-dark);">Fill out the form below and we'll get back to you within 2 hours.</p>
+            
+            <!-- EXISTING FORM START -->
+            <form id="contactForm" onsubmit="handleSubmit(event)">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="firstName">First Name *</label>
+                  <input type="text" id="firstName" name="firstName" class="form-input" required placeholder="John">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="lastName">Last Name *</label>
+                  <input type="text" id="lastName" name="lastName" class="form-input" required placeholder="Doe">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="email">Email Address *</label>
+                  <input type="email" id="email" name="email" class="form-input" required placeholder="john@company.com">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="phone">Phone Number</label>
+                  <input type="tel" id="phone" name="phone" class="form-input" placeholder="+1 (555) 000-0000">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="company">Company Name *</label>
+                <input type="text" id="company" name="company" class="form-input" required placeholder="Your Business Name">
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="employees">Number of Employees</label>
+                  <select id="employees" name="employees" class="form-input">
+                    <option value="">Select...</option>
+                    <option value="1">Just me</option>
+                    <option value="2-5">2-5 employees</option>
+                    <option value="6-20">6-20 employees</option>
+                    <option value="21-50">21-50 employees</option>
+                    <option value="51+">51+ employees</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="budget">Monthly Budget</label>
+                  <select id="budget" name="budget" class="form-input">
+                    <option value="">Select...</option>
+                    <option value="<$50">Less than $50</option>
+                    <option value="$50-$100">$50 - $100</option>
+                    <option value="$100-$200">$100 - $200</option>
+                    <option value="$200+">$200+</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="subject">Subject *</label>
+                <select id="subject" name="subject" class="form-input" required>
+                  <option value="">Select a subject...</option>
+                  <option value="sales">Sales Inquiry</option>
+                  <option value="support">Technical Support</option>
+                  <option value="billing">Billing Question</option>
+                  <option value="partnership">Partnership Opportunity</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="message">Message *</label>
+                <textarea id="message" name="message" class="form-input" rows="5" required placeholder="Tell us how we can help you..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label style="display: flex; align-items: flex-start; gap: var(--space-sm); cursor: pointer;">
+                  <input type="checkbox" name="newsletter" style="margin-top: 4px;">
+                  <span class="text-body-sm" style="color: var(--overcast-blue-dark);">I'd like to receive occasional tips and updates about growing my service business online. (Optional)</span>
+                </label>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+                Send Message
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="22" y1="2" x2="11" y2="13"/>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+              </button>
+
+              <div class="success-message" id="successMessage">
+                ✓ Thank you! Your message has been sent successfully. We'll be in touch within 2 hours.
+              </div>
+            </form>
+            <!-- EXISTING FORM END -->
+
+            <p class="text-body-sm mt-xl text-center" style="color: var(--overcast-blue);">
+              By submitting this form, you agree to our 
+              <a href="#" class="text-toffee">Privacy Policy</a> and 
+              <a href="#" class="text-toffee">Terms of Service</a>.
+            </p>
+          </div>
+
+          <!-- Trust Badges -->
+          <div style="display: flex; flex-wrap: wrap; gap: var(--space-lg); justify-content: center; margin-top: var(--space-2xl);">
+            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span class="text-body-sm" style="color: var(--overcast-blue-dark);">SSL Secured</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <span class="text-body-sm" style="color: var(--overcast-blue-dark);">GDPR Compliant</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              <span class="text-body-sm" style="color: var(--overcast-blue-dark);">No Spam, Ever</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Office Locations -->
+  <section class="section-sm bg-chalk">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="text-h2">Our Offices</h2>
+      </div>
+      
+      <div class="location-grid">
+        <div class="card fade-in">
+          <h3 class="text-h4 mb-md">San Francisco HQ</h3>
+          <p class="text-body" style="color: var(--overcast-blue-dark); margin-bottom: var(--space-md);">
+            123 Innovation Drive<br>
+            San Francisco, CA 94105
+          </p>
+          <a href="#" class="text-toffee" style="font-weight: 600;">Get Directions →</a>
+        </div>
+
+        <div class="card fade-in">
+          <h3 class="text-h4 mb-md">Austin Office</h3>
+          <p class="text-body" style="color: var(--overcast-blue-dark); margin-bottom: var(--space-md);">
+            456 Tech Boulevard<br>
+            Austin, TX 78701
+          </p>
+          <a href="#" class="text-toffee" style="font-weight: 600;">Get Directions →</a>
+        </div>
+
+        <div class="card fade-in">
+          <h3 class="text-h4 mb-md">New York Office</h3>
+          <p class="text-body" style="color: var(--overcast-blue-dark); margin-bottom: var(--space-md);">
+            789 Business Ave<br>
+            New York, NY 10001
+          </p>
+          <a href="#" class="text-toffee" style="font-weight: 600;">Get Directions →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <p class="text-label text-toffee mb-md">QUICK ANSWERS</p>
+        <h2 class="text-h2">Common Questions</h2>
+      </div>
+
+      <div style="max-width: 800px; margin: 0 auto;">
+        <div class="faq-item fade-in" style="border-bottom: 1px solid rgba(139, 160, 178, 0.2); padding: var(--space-lg) 0;">
+          <div class="faq-question" onclick="toggleFaq(this)" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; font-size: 1.125rem;">
+            <span>What are your support hours?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s ease;">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </div>
+          <div class="faq-answer" style="max-height: 0; overflow: hidden; transition: max-height 0.5s ease; color: var(--overcast-blue-dark); margin-top: var(--space-sm);">
+            <p style="padding-top: var(--space-md);">Our support team is available Monday through Friday, 8 AM to 6 PM Eastern Time. Business and Enterprise plan customers also have access to weekend support. Email support is monitored 24/7, and most emails are answered within 2 hours during business hours.</p>
+          </div>
+        </div>
+
+        <div class="faq-item fade-in" style="border-bottom: 1px solid rgba(139, 160, 178, 0.2); padding: var(--space-lg) 0;">
+          <div class="faq-question" onclick="toggleFaq(this)" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; font-size: 1.125rem;">
+            <span>Do you offer custom training for teams?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s ease;">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </div>
+          <div class="faq-answer" style="max-height: 0; overflow: hidden; transition: max-height 0.5s ease; color: var(--overcast-blue-dark); margin-top: var(--space-sm);">
+            <p style="padding-top: var(--space-md);">Yes! Business plan customers receive complimentary custom training sessions for their team. We can tailor the training to your specific use case and workflow. Contact our sales team to schedule a session.</p>
+          </div>
+        </div>
+
+        <div class="faq-item fade-in" style="border-bottom: 1px solid rgba(139, 160, 178, 0.2); padding: var(--space-lg) 0;">
+          <div class="faq-question" onclick="toggleFaq(this)" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; font-size: 1.125rem;">
+            <span>Can I schedule a demo before signing up?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s ease;">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </div>
+          <div class="faq-answer" style="max-height: 0; overflow: hidden; transition: max-height 0.5s ease; color: var(--overcast-blue-dark); margin-top: var(--space-sm);">
+            <p style="padding-top: var(--space-md);">Absolutely! We'd be happy to show you around the platform and answer any questions. Schedule a personalized demo with our team using the form above, and we'll reach out within 2 hours to set up a time that works for you.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section cta-section">
+    <div class="cta-pattern"></div>
+    <div class="container" style="position: relative; z-index: 2;">
+      <div class="text-center">
+        <h2 class="text-h2 mb-lg">Ready to Get Started?</h2>
+        <p class="text-body-lg mb-xl" style="color: var(--overcast-blue); max-width: 600px; margin-left: auto; margin-right: auto;">
+          Join 500+ service businesses already using Omni Studio. Start your free trial today—no credit card required.
+        </p>
+        <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+          <a href="#" class="btn btn-primary btn-lg">Start Free Trial</a>
+          <a href="pricing.html" class="btn btn-secondary btn-lg" style="border-color: var(--chalk-white); color: var(--chalk-white);">View Pricing</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="section-sm bg-chalk" style="border-top: 1px solid rgba(139, 160, 178, 0.2);">
+    <div class="container">
+      <div class="grid grid-4">
+        <div>
+          <a href="../index.html" style="font-size: 1.5rem; font-weight: 800; color: var(--obsidian-black);">
+            omni<span class="text-toffee">.studio</span>
+          </a>
+          <p class="text-body-sm mt-md" style="color: var(--overcast-blue);">
+            Build high-converting landing pages for your service business in minutes.
+          </p>
+        </div>
+        
+        <div>
+          <h4 class="text-h4 mb-md">Product</h4>
+          <ul style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <li><a href="../index.html#features" class="text-body-sm" style="color: var(--overcast-blue-dark);">Features</a></li>
+            <li><a href="pricing.html" class="text-body-sm" style="color: var(--overcast-blue-dark);">Pricing</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Templates</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Integrations</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-h4 mb-md">Company</h4>
+          <ul style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">About Us</a></li>
+            <li><a href="contact.html" class="text-body-sm" style="color: var(--overcast-blue-dark);">Contact</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Careers</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Blog</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-h4 mb-md">Support</h4>
+          <ul style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Help Center</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Documentation</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Status</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top: var(--space-2xl); padding-top: var(--space-xl); border-top: 1px solid rgba(139, 160, 178, 0.2);">
+        <p class="text-body-sm text-center" style="color: var(--overcast-blue);">
+          © 2024 Omni Studio. All rights reserved. Made with ❤️ for service businesses.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    function toggleMenu() {
+      const menu = document.getElementById('navMenu');
+      menu.classList.toggle('active');
+    }
+
+    // Form submission handler
+    function handleSubmit(event) {
+      event.preventDefault();
+      
+      // Show success message
+      const successMessage = document.getElementById('successMessage');
+      successMessage.style.display = 'block';
+      
+      // Scroll to success message
+      successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        event.target.reset();
+        successMessage.style.display = 'none';
+      }, 5000);
+      
+      // In production, you would send the form data to your backend here
+      console.log('Form submitted successfully');
+    }
+
+    // FAQ toggle
+    function toggleFaq(element) {
+      const item = element.closest('.faq-item');
+      const answer = item.querySelector('.faq-answer');
+      const icon = item.querySelector('.faq-icon');
+      
+      if (item.classList.contains('active')) {
+        item.classList.remove('active');
+        answer.style.maxHeight = '0';
+        icon.style.transform = 'rotate(0deg)';
+      } else {
+        item.classList.add('active');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+        icon.style.transform = 'rotate(180deg)';
+      }
+    }
+
+    // GSAP Animations
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.utils.toArray('.fade-in').forEach(element => {
+      gsap.fromTo(element, 
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          scrollTrigger: {
+            trigger: element,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    });
+  </script>
+</body>
+</html>

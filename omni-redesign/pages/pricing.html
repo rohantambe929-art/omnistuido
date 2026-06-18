@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing - Omni Studio</title>
+  <meta name="description" content="Simple, transparent pricing for service businesses. Start free, scale as you grow.">
+  <link rel="stylesheet" href="../css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <style>
+    .pricing-hero {
+      background: linear-gradient(135deg, var(--obsidian-black) 0%, #1a2026 100%);
+      color: var(--chalk-white);
+      padding: var(--space-4xl) 0;
+      text-align: center;
+    }
+
+    .pricing-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-md);
+      margin: var(--space-xl) auto;
+      max-width: 400px;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 60px;
+      height: 32px;
+      background: var(--overcast-blue);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: background var(--transition-base);
+    }
+
+    .toggle-switch.active {
+      background: var(--toffee-brown);
+    }
+
+    .toggle-knob {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 24px;
+      height: 24px;
+      background: var(--chalk-white);
+      border-radius: 50%;
+      transition: transform var(--transition-base);
+    }
+
+    .toggle-switch.active .toggle-knob {
+      transform: translateX(28px);
+    }
+
+    .pricing-card {
+      background: var(--chalk-white);
+      border-radius: var(--radius-xl);
+      padding: var(--space-2xl);
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      transition: all var(--transition-base);
+      border: 2px solid transparent;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .pricing-card.featured {
+      border-color: var(--toffee-brown);
+      box-shadow: 0 20px 40px rgba(217, 119, 6, 0.15);
+    }
+
+    .pricing-card.featured::before {
+      content: 'MOST POPULAR';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--toffee-brown);
+      color: var(--chalk-white);
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .price-amount {
+      font-size: clamp(3rem, 5vw, 4.5rem);
+      font-weight: 800;
+      color: var(--obsidian-black);
+      line-height: 1;
+    }
+
+    .price-period {
+      font-size: 1.125rem;
+      color: var(--overcast-blue);
+      font-weight: 500;
+    }
+
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      margin: var(--space-xl) 0;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+    }
+
+    .feature-check {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      background: var(--toffee-brown);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--chalk-white);
+    }
+
+    .feature-check svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: var(--space-3xl);
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: var(--space-lg);
+      text-align: left;
+      border-bottom: 1px solid rgba(139, 160, 178, 0.2);
+    }
+
+    .comparison-table th {
+      font-weight: 700;
+      font-size: 1.125rem;
+    }
+
+    .comparison-table tr:hover {
+      background: rgba(217, 119, 6, 0.05);
+    }
+
+    .faq-section {
+      background: var(--chalk-white);
+    }
+
+    .faq-item {
+      border-bottom: 1px solid rgba(139, 160, 178, 0.2);
+      padding: var(--space-lg) 0;
+    }
+
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1.125rem;
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--transition-slow);
+      color: var(--overcast-blue-dark);
+      margin-top: var(--space-sm);
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 200px;
+    }
+
+    .faq-icon {
+      transition: transform var(--transition-base);
+    }
+
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+    }
+
+    .guarantee-badge {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      justify-content: center;
+      margin-top: var(--space-2xl);
+      padding: var(--space-lg);
+      background: rgba(217, 119, 6, 0.1);
+      border-radius: var(--radius-lg);
+    }
+
+    @media (max-width: 767px) {
+      .comparison-table {
+        font-size: 0.875rem;
+      }
+      
+      .comparison-table th,
+      .comparison-table td {
+        padding: var(--space-sm);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="bg-chalk" style="position: sticky; top: 0; z-index: 999; box-shadow: var(--shadow-sm);">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--space-md) 0;">
+        <a href="../index.html" style="font-size: 1.5rem; font-weight: 800; color: var(--obsidian-black);">
+          omni<span class="text-toffee">.studio</span>
+        </a>
+        
+        <div class="nav-menu" id="navMenu">
+          <ul style="display: flex; flex-direction: column; gap: var(--space-lg);">
+            <li><a href="../index.html#features" style="font-weight: 500;">Features</a></li>
+            <li><a href="../index.html#how-it-works" style="font-weight: 500;">How It Works</a></li>
+            <li><a href="../index.html#testimonials" style="font-weight: 500;">Testimonials</a></li>
+            <li><a href="pricing.html" style="font-weight: 500; color: var(--toffee-brown);">Pricing</a></li>
+            <li><a href="contact.html" style="font-weight: 500;">Contact</a></li>
+            <li><a href="#" class="btn btn-primary btn-sm">Get Started Free</a></li>
+          </ul>
+        </div>
+
+        <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Toggle menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h18M3 6h18M3 18h18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Pricing Hero -->
+  <section class="pricing-hero">
+    <div class="container">
+      <p class="text-label" style="color: var(--toffee-brown); margin-bottom: var(--space-md);">SIMPLE, TRANSPARENT PRICING</p>
+      <h1 class="text-display mb-lg">Choose the Plan That's Right for Your Business</h1>
+      <p class="text-body-lg" style="color: var(--overcast-blue); max-width: 700px; margin: 0 auto;">
+        Start with a 14-day free trial. No credit card required. Upgrade or cancel anytime as your business grows.
+      </p>
+      
+      <div class="pricing-toggle">
+        <span style="font-weight: 500;">Monthly</span>
+        <div class="toggle-switch" id="pricingToggle" onclick="togglePricing()">
+          <div class="toggle-knob"></div>
+        </div>
+        <span style="font-weight: 500;">
+          Annual <span class="text-toffee" style="margin-left: var(--space-xs);">(Save 20%)</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Cards -->
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-3">
+        <!-- Starter Plan -->
+        <div class="pricing-card fade-in">
+          <h3 class="text-h3 mb-md">Starter</h3>
+          <p class="text-body" style="color: var(--overcast-blue-dark); margin-bottom: var(--space-lg);">Perfect for solo service providers just getting started online.</p>
+          <div class="mb-xl">
+            <div class="price-amount">$<span class="price-value" data-monthly="29" data-annual="23">29</span></div>
+            <div class="price-period">per month</div>
+          </div>
+          <a href="#" class="btn btn-secondary" style="width: 100%;">Start Free Trial</a>
+          
+          <ul class="feature-list">
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>Up to 3 landing pages</span>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>Mobile responsive design</span>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>Basic lead capture forms</span>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>Email support</span>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>SSL certificate included</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Professional Plan -->
+        <div class="pricing-card featured fade-in">
+          <h3 class="text-h3 mb-md">Professional</h3>
+          <p class="text-body" style="color: var(--overcast-blue-dark); margin-bottom: var(--space-lg);">Ideal for growing service businesses with multiple offerings.</p>
+          <div class="mb-xl">
+            <div class="price-amount">$<span class="price-value" data-monthly="59" data-annual="47">59</span></div>
+            <div class="price-period">per month</div>
+          </div>
+          <a href="#" class="btn btn-primary" style="width: 100%;">Start Free Trial</a>
+          
+          <ul class="feature-list">
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>Unlimited landing pages</span>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>Advanced drag & drop builder</span>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>A/B testing capabilities</span>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>Analytics & conversion tracking</span>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>Priority email & chat support</span>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>Custom domain connection</span>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>Lead management dashboard</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Business Plan -->
+        <div class="pricing-card fade-in">
+          <h3 class="text-h3 mb-md">Business</h3>
+          <p class="text-body" style="color: var(--overcast-blue-dark); margin-bottom: var(--space-lg);">For established businesses needing advanced features and support.</p>
+          <div class="mb-xl">
+            <div class="price-amount">$<span class="price-value" data-monthly="99" data-annual="79">99</span></div>
+            <div class="price-period">per month</div>
+          </div>
+          <a href="#" class="btn btn-secondary" style="width: 100%;">Start Free Trial</a>
+          
+          <ul class="feature-list">
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>Everything in Professional</span>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>Multi-user access (up to 5)</span>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>White-label branding options</span>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>Advanced integrations (CRM, Zapier)</span>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>Dedicated account manager</span>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>Phone support</span>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <span>Custom training sessions</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Guarantee Badge -->
+      <div class="guarantee-badge fade-in">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--toffee-brown)" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M9 12l2 2 4-4"/>
+        </svg>
+        <div>
+          <div style="font-weight: 700; font-size: 1.125rem;">30-Day Money-Back Guarantee</div>
+          <div class="text-body-sm" style="color: var(--overcast-blue-dark);">If you're not satisfied, we'll refund your first payment. No questions asked.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison Table -->
+  <section class="section-sm bg-chalk">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="text-h2">Compare Features Side by Side</h2>
+      </div>
+      
+      <div style="overflow-x: auto;">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Starter</th>
+              <th>Professional</th>
+              <th>Business</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Landing Pages</td>
+              <td>3</td>
+              <td>Unlimited</td>
+              <td>Unlimited</td>
+            </tr>
+            <tr>
+              <td>Mobile Responsive</td>
+              <td>✓</td>
+              <td>✓</td>
+              <td>✓</td>
+            </tr>
+            <tr>
+              <td>Drag & Drop Builder</td>
+              <td>Basic</td>
+              <td>Advanced</td>
+              <td>Advanced</td>
+            </tr>
+            <tr>
+              <td>A/B Testing</td>
+              <td>—</td>
+              <td>✓</td>
+              <td>✓</td>
+            </tr>
+            <tr>
+              <td>Analytics Dashboard</td>
+              <td>Basic</td>
+              <td>Advanced</td>
+              <td>Advanced</td>
+            </tr>
+            <tr>
+              <td>Custom Domain</td>
+              <td>—</td>
+              <td>✓</td>
+              <td>✓</td>
+            </tr>
+            <tr>
+              <td>Lead Management</td>
+              <td>—</td>
+              <td>✓</td>
+              <td>✓</td>
+            </tr>
+            <tr>
+              <td>CRM Integrations</td>
+              <td>—</td>
+              <td>—</td>
+              <td>✓</td>
+            </tr>
+            <tr>
+              <td>Team Members</td>
+              <td>1</td>
+              <td>3</td>
+              <td>5</td>
+            </tr>
+            <tr>
+              <td>Support</td>
+              <td>Email</td>
+              <td>Priority Email & Chat</td>
+              <td>Phone, Email & Chat</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="section faq-section">
+    <div class="container">
+      <div class="section-header">
+        <p class="text-label text-toffee mb-md">GOT QUESTIONS?</p>
+        <h2 class="text-h2">Frequently Asked Questions</h2>
+      </div>
+
+      <div style="max-width: 800px; margin: 0 auto;">
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Can I really start for free?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </div>
+          <div class="faq-answer">
+            <p style="padding-top: var(--space-md);">Absolutely! Every plan comes with a 14-day free trial. No credit card required. You can explore all the features and build your first landing page before committing to a paid plan.</p>
+          </div>
+        </div>
+
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>What happens after my free trial ends?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </div>
+          <div class="faq-answer">
+            <p style="padding-top: var(--space-md);">After your 14-day trial, you can choose to upgrade to any paid plan to keep your pages live. If you don't upgrade, your pages will be paused but not deleted. You can upgrade anytime to reactivate them.</p>
+          </div>
+        </div>
+
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Can I change plans later?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </div>
+          <div class="faq-answer">
+            <p style="padding-top: var(--space-md);">Yes! You can upgrade or downgrade your plan at any time. When upgrading, you'll get immediate access to new features. When downgrading, the change takes effect at your next billing cycle.</p>
+          </div>
+        </div>
+
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Is there a long-term contract?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </div>
+          <div class="faq-answer">
+            <p style="padding-top: var(--space-md);">No contracts ever. All plans are month-to-month unless you choose annual billing (which saves you 20%). You can cancel anytime with no penalties or hidden fees.</p>
+          </div>
+        </div>
+
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Do you offer discounts for non-profits?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </div>
+          <div class="faq-answer">
+            <p style="padding-top: var(--space-md);">Yes! We offer a 25% discount for registered non-profit organizations. Contact our sales team with proof of your non-profit status, and we'll set you up with a special pricing plan.</p>
+          </div>
+        </div>
+
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>What if I need help getting started?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </div>
+          <div class="faq-answer">
+            <p style="padding-top: var(--space-md);">We've got you covered! All plans include access to our knowledge base and video tutorials. Professional and Business plans also get priority support. Business plan customers even get custom training sessions with our team.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section cta-section">
+    <div class="cta-pattern"></div>
+    <div class="container" style="position: relative; z-index: 2;">
+      <div class="text-center">
+        <h2 class="text-h2 mb-lg">Still Not Sure Which Plan Is Right for You?</h2>
+        <p class="text-body-lg mb-xl" style="color: var(--overcast-blue); max-width: 600px; margin-left: auto; margin-right: auto;">
+          Our team is here to help you find the perfect solution for your business needs.
+        </p>
+        <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+          <a href="#" class="btn btn-primary btn-lg">Start Free Trial</a>
+          <a href="contact.html" class="btn btn-secondary btn-lg" style="border-color: var(--chalk-white); color: var(--chalk-white);">Talk to Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="section-sm bg-chalk" style="border-top: 1px solid rgba(139, 160, 178, 0.2);">
+    <div class="container">
+      <div class="grid grid-4">
+        <div>
+          <a href="../index.html" style="font-size: 1.5rem; font-weight: 800; color: var(--obsidian-black);">
+            omni<span class="text-toffee">.studio</span>
+          </a>
+          <p class="text-body-sm mt-md" style="color: var(--overcast-blue);">
+            Build high-converting landing pages for your service business in minutes.
+          </p>
+        </div>
+        
+        <div>
+          <h4 class="text-h4 mb-md">Product</h4>
+          <ul style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <li><a href="../index.html#features" class="text-body-sm" style="color: var(--overcast-blue-dark);">Features</a></li>
+            <li><a href="pricing.html" class="text-body-sm" style="color: var(--overcast-blue-dark);">Pricing</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Templates</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Integrations</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-h4 mb-md">Company</h4>
+          <ul style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">About Us</a></li>
+            <li><a href="contact.html" class="text-body-sm" style="color: var(--overcast-blue-dark);">Contact</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Careers</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Blog</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-h4 mb-md">Support</h4>
+          <ul style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Help Center</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Documentation</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Status</a></li>
+            <li><a href="#" class="text-body-sm" style="color: var(--overcast-blue-dark);">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top: var(--space-2xl); padding-top: var(--space-xl); border-top: 1px solid rgba(139, 160, 178, 0.2);">
+        <p class="text-body-sm text-center" style="color: var(--overcast-blue);">
+          © 2024 Omni Studio. All rights reserved. Made with ❤️ for service businesses.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    function toggleMenu() {
+      const menu = document.getElementById('navMenu');
+      menu.classList.toggle('active');
+    }
+
+    // Pricing toggle
+    let isAnnual = false;
+    function togglePricing() {
+      isAnnual = !isAnnual;
+      const toggle = document.getElementById('pricingToggle');
+      toggle.classList.toggle('active');
+      
+      const priceValues = document.querySelectorAll('.price-value');
+      priceValues.forEach(el => {
+        const monthly = el.dataset.monthly;
+        const annual = el.dataset.annual;
+        el.textContent = isAnnual ? annual : monthly;
+      });
+    }
+
+    // FAQ toggle
+    function toggleFaq(element) {
+      const item = element.closest('.faq-item');
+      item.classList.toggle('active');
+    }
+
+    // GSAP Animations
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.utils.toArray('.fade-in').forEach(element => {
+      gsap.fromTo(element, 
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          scrollTrigger: {
+            trigger: element,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    });
+  </script>
+</body>
+</html>
